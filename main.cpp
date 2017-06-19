@@ -19,8 +19,8 @@ int main()
     {
         IOperand const * lhs =factory.createOperand(eOperandType::DOUBLE, "42.42");
         IOperand const * rhs =factory.createOperand(eOperandType::INT8, "2");
-        IOperand const * res = *lhs + *rhs;
-        std::cout << lhs->toString() << " + " << rhs->toString() << " = " << res->toString() << std::endl;
+        IOperand const * res = *lhs * *rhs;
+        std::cout << lhs->toString() << " * " << rhs->toString() << " = " << res->toString() << std::endl;
     }
 
 std::cout << "\n\n";

@@ -23,7 +23,7 @@ static int getResPrecision(int lhs, int rhs)
     return lhs >= rhs ? lhs : rhs;
 }
 
-static void setPrecision(std::string & str, int precision)
+static void setResPrecision(std::string & str, int precision)
 {
     std::size_t floatPoint = str.find('.');
     if (floatPoint != std::string::npos) {
@@ -41,11 +41,11 @@ Operand::Operand(eOperandType type, std::string val)
         _strValue(val)
 {
     if (type >= eOperandType::FLOAT) {
-        std::string precision;
+        std::string decimals;
         std::size_t floatPoint = val.find('.');
         if (floatPoint != std::string::npos) {
-            precision = val.substr(floatPoint);
-            _precision = precision.size();
+            decimals = val.substr(floatPoint);
+            _precision = decimals.size();
         }
     }
 }
@@ -83,7 +83,7 @@ IOperand const * Operand::operator+( IOperand const & rhs ) const
                 long double numericalTotal = numericalLhs + numericalRhs;
                 resultValue = std::to_string(numericalTotal);
             }
-            setPrecision(resultValue, resultPrecision);
+            setResPrecision(resultValue, resultPrecision);
             result = _factory.createOperand(resultType, resultValue);
 
         }
@@ -118,7 +118,7 @@ IOperand const * Operand::operator-( IOperand const & rhs ) const
                 long double numericalTotal = numericalLhs - numericalRhs;
                 resultValue = std::to_string(numericalTotal);
             }
-            setPrecision(resultValue, resultPrecision);
+            setResPrecision(resultValue, resultPrecision);
             result = _factory.createOperand(resultType, resultValue);
 
         }
@@ -153,7 +153,7 @@ IOperand const * Operand::operator*( IOperand const & rhs ) const
                 long double numericalTotal = numericalLhs * numericalRhs;
                 resultValue = std::to_string(numericalTotal);
             }
-            setPrecision(resultValue, resultPrecision);
+            setResPrecision(resultValue, resultPrecision);
             result = _factory.createOperand(resultType, resultValue);
 
         }
@@ -188,7 +188,7 @@ IOperand const * Operand::operator/( IOperand const & rhs ) const
                 long double numericalTotal = numericalLhs / numericalRhs;
                 resultValue = std::to_string(numericalTotal);
             }
-            setPrecision(resultValue, resultPrecision);
+            setResPrecision(resultValue, resultPrecision);
             result = _factory.createOperand(resultType, resultValue);
 
         }
@@ -223,7 +223,7 @@ IOperand const * Operand::operator%( IOperand const & rhs ) const
                 long double numericalTotal = fmod(numericalLhs, numericalRhs);
                 resultValue = std::to_string(numericalTotal);
             }
-            setPrecision(resultValue, resultPrecision);
+            setResPrecision(resultValue, resultPrecision);
             result = _factory.createOperand(resultType, resultValue);
 
         }
