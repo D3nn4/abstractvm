@@ -2,17 +2,19 @@
 #define _OPERAND_HPP_
 
 #include "ioperand.hpp"
+#include "factory.hpp"
 #include <string>
 
-template class<T>
+class Factory;
+
 class Operand : public IOperand
 {
 public:
 
-    Operand(T val, int precision, eOperandType type);
+    Operand(eOperandType type, std::string val);
 
     int getPrecision( void ) const override;
-    IOperand::eOperandType getType( void ) const override;
+    eOperandType getType( void ) const override;
 
     IOperand const * operator+( IOperand const & rhs ) const override;
     IOperand const * operator-( IOperand const & rhs ) const override;
@@ -24,10 +26,9 @@ public:
 
     ~Operand( void ) {}
 
-    T value;
-
 private:
 
+    Factory _factory;
     int _precision;
     eOperandType _type;
     std::string const _strValue;

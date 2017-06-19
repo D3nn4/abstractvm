@@ -1,7 +1,8 @@
 NAME = abstractVM
 
 SRC =	main.cpp \
-			./src/factory.cpp
+			./src/factory.cpp \
+			./src/operand.cpp
 
 HEADER =	-I./includes
 
