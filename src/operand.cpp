@@ -2,6 +2,7 @@
 #include <iostream>
 #include <exception>
 #include <cmath>
+#include <iomanip>
 
 static eOperandType getResType(eOperandType lhs, eOperandType rhs)
 {
@@ -17,11 +18,36 @@ static eOperandType getResType(eOperandType lhs, eOperandType rhs)
     }
 };
 
-Operand::Operand(eOperandType type, std::string val)
-    :_type(type),
-     _strValue(val)
+static int getResPrecision(int lhs, int rhs)
 {
-    // TODO get precision !!!
+    return lhs >= rhs ? lhs : rhs;
+}
+
+static void setPrecision(std::string & str, int precision)
+{
+    std::size_t floatPoint = str.find('.');
+    if (floatPoint != std::string::npos) {
+        int endOfDouble = floatPoint + precision;
+        str = str.substr(0, endOfDouble);
+    }
+    else {
+        // TODO trow exception or error management
+    }
+}
+
+Operand::Operand(eOperandType type, std::string val)
+    :_precision(0),
+        _type(type),
+        _strValue(val)
+{
+    if (type >= eOperandType::FLOAT) {
+        std::string precision;
+        std::size_t floatPoint = val.find('.');
+        if (floatPoint != std::string::npos) {
+            precision = val.substr(floatPoint);
+            _precision = precision.size();
+        }
+    }
 }
 
 int Operand::getPrecision( void ) const
@@ -37,6 +63,7 @@ eOperandType Operand::getType( void ) const
 IOperand const * Operand::operator+( IOperand const & rhs ) const
 {
     eOperandType resultType = getResType(this->getType(), rhs.getType());
+    int resultPrecision = getResPrecision(getPrecision(), rhs.getPrecision());
     Operand const * rhsOperand = nullptr;
     IOperand const * result = nullptr;
     std::string resultValue;
@@ -56,6 +83,7 @@ IOperand const * Operand::operator+( IOperand const & rhs ) const
                 long double numericalTotal = numericalLhs + numericalRhs;
                 resultValue = std::to_string(numericalTotal);
             }
+            setPrecision(resultValue, resultPrecision);
             result = _factory.createOperand(resultType, resultValue);
 
         }
