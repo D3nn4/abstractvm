@@ -2,6 +2,7 @@ NAME = abstractVM
 
 SRC =	main.cpp \
 			./src/factory.cpp \
+			./src/lexer.cpp \
 			./src/operand.cpp
 
 HEADER =	-I./includes

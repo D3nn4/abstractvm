@@ -1,6 +1,7 @@
-// #include "abstractvm.hpp"
 #include "factory.hpp"
 #include "operand.hpp"
+#include "lexer.hpp"
+#include "token.hpp"
 #include <iostream>
 
 int main()
@@ -31,6 +32,16 @@ std::cout << "\n\n";
         IOperand const * res = *lhs + *rhs;
         std::cout << lhs->toString() << " + " << rhs->toString() << " = " << res->toString() << std::endl;
     }
+
+    Lexer lexer;
+    Token token = lexer.createToken("push int8(2)");
+    if(token.valueOperand != nullptr){
+        std::cout << "Token with input " << token.input << " has an operand with a value of : " << token.valueOperand->toString() << std::endl;
+    }
+    else {
+        std::cout << "Token with input " << token.input << " has an nullptr " << std::endl;
+    }
+
     std::cout << "The End.\n";
 
 return 0;
