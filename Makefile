@@ -2,7 +2,9 @@ NAME = abstractVM
 
 SRC =	main.cpp \
 			./src/factory.cpp \
+			./src/abstractvm.cpp \
 			./src/lexer.cpp \
+			./src/cmdmanager.cpp \
 			./src/operand.cpp
 
 HEADER =	-I./includes
