@@ -20,7 +20,7 @@ public:
 
     CmdManager();
 
-    // bool cmd(std::vector<IOperand const *> & stack, Token token);
+    void cmd(std::vector<IOperand const *> & stack, Token token);
 
 private:
 
@@ -34,7 +34,6 @@ private:
     void div    (std::vector<IOperand const *> & stack, Token token);
     void mod    (std::vector<IOperand const *> & stack, Token token);
     void print  (std::vector<IOperand const *> & stack, Token token);
-    void exit   (std::vector<IOperand const *> & stack, Token token);
 
     cmdByType cmds;
 };

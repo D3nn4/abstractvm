@@ -9,6 +9,7 @@
 #include <vector>
 #include <string>
 #include <cstdbool>
+#include <exception>
 
 class AbstractVM
 {
@@ -17,6 +18,20 @@ public:
     //void run(std::string fileName) const;
     void run();
 
+    //////////////exception
+    class Exception : public std::exception
+    {
+    public:
+
+        Exception(std::string msg) :_msg(msg){}
+        virtual const char* what() const throw (){
+            return _msg.c_str();
+        }
+    private:
+
+        std::string _msg;
+    };
+    //////////////
 
 private:
 
@@ -26,7 +41,7 @@ private:
     Factory _factory;
     Lexer _lexer;
     CmdManager _cmdManager;
-    
+
     std::vector<IOperand const *> _stack;
 
 };

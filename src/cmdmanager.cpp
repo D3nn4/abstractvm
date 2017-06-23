@@ -1,6 +1,8 @@
 #include "cmdmanager.hpp"
+#include "abstractvm.hpp"
 #include <iostream>
 #include <algorithm>
+#include <exception>
 
 static void fillMap(CmdManager *self, CmdManager::cmdByType& toFill, Token::CMD type, CmdManager::funcPtr cmdFunc)
 {
@@ -26,7 +28,21 @@ CmdManager::CmdManager()
     fillMap(this, cmds, Token::CMD::DIV,    &CmdManager::div);
     fillMap(this, cmds, Token::CMD::MOD,    &CmdManager::mod);
     fillMap(this, cmds, Token::CMD::PRINT,  &CmdManager::print);
-    fillMap(this, cmds, Token::CMD::EXIT,   &CmdManager::exit);
+}
+
+void CmdManager::cmd(std::vector<IOperand const *> & stack, Token token)
+{
+    if(cmds.find(token.cmd) == cmds.end()) {
+        throw AbstractVM::Exception("Unknown cmd");
+    }
+    try
+    {
+        cmds[token.cmd](stack, token);
+    }
+    catch(AbstractVM::Exception & e)
+    {
+        std::cout << "error : " << e.what() << std::endl;
+    }
 }
 
 void CmdManager::push   (std::vector<IOperand const *> & stack, Token token)
@@ -35,7 +51,7 @@ void CmdManager::push   (std::vector<IOperand const *> & stack, Token token)
         stack.push_back(token.valueOperand);
     }
     else {
-        //TODO trow exception
+        throw AbstractVM::Exception("Wrong value");
     }
 }
 void CmdManager::pop    (std::vector<IOperand const *> & stack, Token token)
@@ -44,16 +60,13 @@ void CmdManager::pop    (std::vector<IOperand const *> & stack, Token token)
         stack.pop_back();
     }
     else {
-        //TODO trow exception
+        throw AbstractVM::Exception("Empty stack");
     }
 }
 void CmdManager::dump   (std::vector<IOperand const *> & stack, Token token)
 {
     if (!stack.empty()) {
         for_each(stack.rbegin(), stack.rend(), displayValue);
-    }
-    else {
-        //TODO trow exception
     }
 }
 void CmdManager::assert (std::vector<IOperand const *> & stack, Token token)
@@ -62,11 +75,11 @@ void CmdManager::assert (std::vector<IOperand const *> & stack, Token token)
         IOperand const * lastOnStack = stack.back();
         if(lastOnStack->getType() != token.valueOperand->getType()
            || lastOnStack->toString().compare(token.valueOperand->toString()) != 0) {
-            //TODO trow exception
+            throw AbstractVM::Exception("Wrong assert value");
         }
     }
     else {
-        //TODO trow exception
+        throw AbstractVM::Exception("No value to assert");
     }
 }
 void CmdManager::add    (std::vector<IOperand const *> & stack, Token token)
@@ -78,12 +91,13 @@ void CmdManager::add    (std::vector<IOperand const *> & stack, Token token)
         stack.pop_back();
         IOperand const * result = *lhs + *rhs;
         if (result == nullptr) {
-            //TODO trow exception 
+            throw AbstractVM::Exception("Error on result");
+            return;
         }
         stack.push_back(result);
     }
     else {
-        //TODO trow exception
+        throw AbstractVM::Exception("Nothing to add");
     }
 }
 void CmdManager::sub    (std::vector<IOperand const *> & stack, Token token)
@@ -95,12 +109,13 @@ void CmdManager::sub    (std::vector<IOperand const *> & stack, Token token)
         stack.pop_back();
         IOperand const * result = *lhs - *rhs;
         if (result == nullptr) {
-            //TODO trow exception 
+            throw AbstractVM::Exception("Error on result");
+            return;
         }
         stack.push_back(result);
     }
     else {
-        //TODO trow exception
+        throw AbstractVM::Exception("Nothing to sub");
     }
 }
 void CmdManager::mult   (std::vector<IOperand const *> & stack, Token token)
@@ -112,53 +127,61 @@ void CmdManager::mult   (std::vector<IOperand const *> & stack, Token token)
         stack.pop_back();
         IOperand const * result = *lhs * *rhs;
         if (result == nullptr) {
-            //TODO trow exception 
+            throw AbstractVM::Exception("Error on result");
+            return;
         }
         stack.push_back(result);
     }
     else {
-        //TODO trow exception
+        throw AbstractVM::Exception("Nothing to mult");
     }
 }
 void CmdManager::div    (std::vector<IOperand const *> & stack, Token token)
 {
     if (stack.size() > 1) {
         IOperand const * rhs = stack.back();
+        std::cout << rhs->toString() << std::endl;
+        if (rhs->toString().compare("0") == 0) {
+            throw AbstractVM::Exception("Can't divide by 0");
+            return;
+        }
         stack.pop_back();
         IOperand const * lhs = stack.back();
         stack.pop_back();
         IOperand const * result = *lhs / *rhs;
         if (result == nullptr) {
-            //TODO trow exception 
+            throw AbstractVM::Exception("Error on result");
+            return;
         }
         stack.push_back(result);
     }
     else {
-        //TODO trow exception
+        throw AbstractVM::Exception("Nothing to div");
     }
 }
 void CmdManager::mod    (std::vector<IOperand const *> & stack, Token token)
 {
     if (stack.size() > 1) {
         IOperand const * rhs = stack.back();
+        if (rhs->toString().compare("0") == 0) {
+            throw AbstractVM::Exception("Can't divide by 0");
+            return;
+        }
         stack.pop_back();
         IOperand const * lhs = stack.back();
         stack.pop_back();
         IOperand const * result = *lhs % *rhs;
         if (result == nullptr) {
-            //TODO trow exception 
+            throw AbstractVM::Exception("Error on result");
+            return;
         }
         stack.push_back(result);
     }
     else {
-        //TODO trow exception
+        throw AbstractVM::Exception("Nothing to div");
     }
 }
 void CmdManager::print  (std::vector<IOperand const *> & stack, Token token)
-{
-    
-}
-void CmdManager::exit   (std::vector<IOperand const *> & stack, Token token)
 {
     
 }
