@@ -41,7 +41,8 @@ void CmdManager::cmd(std::vector<IOperand const *> & stack, Token token)
     }
     catch(AbstractVM::Exception & e)
     {
-        std::cout << "error : " << e.what() << std::endl;
+        // std::cout << "error : " << e.what() << std::endl;
+        throw AbstractVM::Exception("Wrong value");
     }
 }
 
@@ -54,7 +55,7 @@ void CmdManager::push   (std::vector<IOperand const *> & stack, Token token)
         throw AbstractVM::Exception("Wrong value");
     }
 }
-void CmdManager::pop    (std::vector<IOperand const *> & stack, Token token)
+void CmdManager::pop    (std::vector<IOperand const *> & stack, Token )
 {
     if(!stack.empty()) {
         stack.pop_back();
@@ -63,7 +64,7 @@ void CmdManager::pop    (std::vector<IOperand const *> & stack, Token token)
         throw AbstractVM::Exception("Empty stack");
     }
 }
-void CmdManager::dump   (std::vector<IOperand const *> & stack, Token token)
+void CmdManager::dump   (std::vector<IOperand const *> & stack, Token )
 {
     if (!stack.empty()) {
         for_each(stack.rbegin(), stack.rend(), displayValue);
@@ -82,7 +83,7 @@ void CmdManager::assert (std::vector<IOperand const *> & stack, Token token)
         throw AbstractVM::Exception("No value to assert");
     }
 }
-void CmdManager::add    (std::vector<IOperand const *> & stack, Token token)
+void CmdManager::add    (std::vector<IOperand const *> & stack, Token )
 {
     if (stack.size() > 1) {
         IOperand const * rhs = stack.back();
@@ -100,7 +101,7 @@ void CmdManager::add    (std::vector<IOperand const *> & stack, Token token)
         throw AbstractVM::Exception("Nothing to add");
     }
 }
-void CmdManager::sub    (std::vector<IOperand const *> & stack, Token token)
+void CmdManager::sub    (std::vector<IOperand const *> & stack, Token )
 {
     if (stack.size() > 1) {
         IOperand const * rhs = stack.back();
@@ -118,7 +119,7 @@ void CmdManager::sub    (std::vector<IOperand const *> & stack, Token token)
         throw AbstractVM::Exception("Nothing to sub");
     }
 }
-void CmdManager::mult   (std::vector<IOperand const *> & stack, Token token)
+void CmdManager::mult   (std::vector<IOperand const *> & stack, Token )
 {
     if (stack.size() > 1) {
         IOperand const * rhs = stack.back();
@@ -136,7 +137,7 @@ void CmdManager::mult   (std::vector<IOperand const *> & stack, Token token)
         throw AbstractVM::Exception("Nothing to mult");
     }
 }
-void CmdManager::div    (std::vector<IOperand const *> & stack, Token token)
+void CmdManager::div    (std::vector<IOperand const *> & stack, Token )
 {
     if (stack.size() > 1) {
         IOperand const * rhs = stack.back();
@@ -159,7 +160,7 @@ void CmdManager::div    (std::vector<IOperand const *> & stack, Token token)
         throw AbstractVM::Exception("Nothing to div");
     }
 }
-void CmdManager::mod    (std::vector<IOperand const *> & stack, Token token)
+void CmdManager::mod    (std::vector<IOperand const *> & stack, Token )
 {
     if (stack.size() > 1) {
         IOperand const * rhs = stack.back();
@@ -181,7 +182,7 @@ void CmdManager::mod    (std::vector<IOperand const *> & stack, Token token)
         throw AbstractVM::Exception("Nothing to div");
     }
 }
-void CmdManager::print  (std::vector<IOperand const *> & stack, Token token)
+void CmdManager::print  (std::vector<IOperand const *> & stack, Token )
 {
     
 }

@@ -24,16 +24,16 @@ public:
 
 private:
 
-    void push   (std::vector<IOperand const *> & stack, Token token);
-    void pop    (std::vector<IOperand const *> & stack, Token token);
-    void dump   (std::vector<IOperand const *> & stack, Token token);
-    void assert (std::vector<IOperand const *> & stack, Token token);
-    void add    (std::vector<IOperand const *> & stack, Token token);
-    void sub    (std::vector<IOperand const *> & stack, Token token);
-    void mult   (std::vector<IOperand const *> & stack, Token token);
-    void div    (std::vector<IOperand const *> & stack, Token token);
-    void mod    (std::vector<IOperand const *> & stack, Token token);
-    void print  (std::vector<IOperand const *> & stack, Token token);
+    void push   (std::vector<IOperand const *> & stack, Token );
+    void pop    (std::vector<IOperand const *> & stack, Token );
+    void dump   (std::vector<IOperand const *> & stack, Token );
+    void assert (std::vector<IOperand const *> & stack, Token );
+    void add    (std::vector<IOperand const *> & stack, Token );
+    void sub    (std::vector<IOperand const *> & stack, Token );
+    void mult   (std::vector<IOperand const *> & stack, Token );
+    void div    (std::vector<IOperand const *> & stack, Token );
+    void mod    (std::vector<IOperand const *> & stack, Token );
+    void print  (std::vector<IOperand const *> & stack, Token );
 
     cmdByType cmds;
 };

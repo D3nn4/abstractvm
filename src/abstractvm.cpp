@@ -1,16 +1,26 @@
 #include "abstractvm.hpp"
 #include <iostream>
 #include <exception>
+#include <fstream>
+#include <sstream>
 
-// void AbstractVM::run(std::string fileName)
-// {
-    
-// }
+void AbstractVM::run(std::string fileName)
+{
+    std::ifstream infile(fileName);
+    std::string line;
+    _readOnFile = true;
+    while (std::getline(infile, line)) {
+        std::istringstream iss(line);
+        // std::cout << line << std::endl;
+        _manageEntry(line);
+        line.clear();
+    }
+}
 
 void AbstractVM::run()
 {
+    _readOnFile = false;
     std::string entry;
-
     bool read = true;
     while(read) {
         std::getline(std::cin, entry);
@@ -50,4 +60,5 @@ bool AbstractVM::_applyCmd(Token token)
     else {
         return false;
     }
+    return true;
 }

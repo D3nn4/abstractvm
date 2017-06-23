@@ -15,7 +15,7 @@ class AbstractVM
 {
 public:
 
-    //void run(std::string fileName) const;
+    void run(std::string fileName);
     void run();
 
     //////////////exception
@@ -41,6 +41,8 @@ private:
     Factory _factory;
     Lexer _lexer;
     CmdManager _cmdManager;
+
+    bool _readOnFile;
 
     std::vector<IOperand const *> _stack;
 
