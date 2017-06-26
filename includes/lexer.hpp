@@ -18,6 +18,7 @@ private:
     Token _fillToken(std::vector<std::string> _cmdAndValue);
     std::string _getValueType(std::string string);
     std::string _getValue(std::string string);
+    std::string _deleteComments(std::string string);
 
     std::map<std::string, Token::CMD> _getCmdToken;
     std::map<std::string, eOperandType> _getOperandType;

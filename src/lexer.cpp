@@ -42,12 +42,27 @@ Token Lexer::createToken(std::string str)
         throw AbstractVM::Exception("No input");
     }
     else {
-        std::vector<std::string> cmdAndValue;
-        boost::split(cmdAndValue,str,boost::is_any_of(" "));
-        newToken = _fillToken(cmdAndValue);
-        newToken.input = str;
+        str = _deleteComments(str);
+        if(str.empty()) {
+            newToken.cmd = Token::CMD::COM;
+        }
+        else {
+            std::vector<std::string> cmdAndValue;
+            boost::split(cmdAndValue,str,boost::is_any_of(" "));
+            newToken = _fillToken(cmdAndValue);
+            newToken.input = str;
+        }
     }
     return newToken;
+}
+
+std::string Lexer::_deleteComments(std::string str)
+{
+    size_t semiColon = str.find(';');
+    if(semiColon != std::string::npos){
+        str = str.substr(0, semiColon);
+    }
+    return str;
 }
 
 Token Lexer::_fillToken(std::vector<std::string> cmdAndValue)
@@ -83,7 +98,7 @@ Token Lexer::_fillToken(std::vector<std::string> cmdAndValue)
 std::string Lexer::_getValueType(std::string string)
 {
     std::string valueType;
-    size_t lengthValue = string.find('('); // -1 to get rid of '('
+    size_t lengthValue = string.find('(');
     if(lengthValue != std::string::npos) {
         valueType = string.substr(0, lengthValue);
     }

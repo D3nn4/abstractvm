@@ -78,16 +78,16 @@ bool AbstractVM::_applyCmd(Token token)
 {
     if(token.cmd != Token::CMD::EMPTY
        || token.cmd != Token::CMD::EXIT) {
-        try {
-            _cmdManager.cmd(_stack, token);
+        if(token.cmd != Token::CMD::COM) {
+            try {
+                _cmdManager.cmd(_stack, token);
+            }
+            catch (Exception & e) {
+                std::cout << "error : " << e.what() << std::endl;
+                return false;
+            }
         }
-        catch (Exception & e) {
-            std::cout << "error : " << e.what() << std::endl;
-            return false;
-        }
+        return true;
     }
-    else {
-        return false;
-    }
-    return true;
+    return false;
 }
