@@ -1,5 +1,7 @@
 #include "factory.hpp"
 #include "operand.hpp"
+#include <exception>
+#include "abstractvm.hpp"
 
 #include <iostream>
 #include <string>
@@ -10,6 +12,16 @@ static void fillMap(Factory *self, Factory::ctorByType& toFill, eOperandType typ
     using namespace std::placeholders;
     Factory::funcObject toAdd = std::bind(factoryfunc, self, _1);
     toFill.insert( std::make_pair( type, toAdd));
+}
+
+static void verifyTypesGiven(eOperandType type, std::string const & value)
+{
+
+    bool hasFloatingPoint = (value.find( "." ) != std::string::npos);
+    if((type < eOperandType::FLOAT && hasFloatingPoint)
+       || (type >= eOperandType::FLOAT && !hasFloatingPoint)) {
+        throw AbstractVM::Exception("Value not of the given type");
+    }
 }
 
 Factory::Factory()
@@ -25,6 +37,13 @@ Factory::Factory()
 IOperand const * Factory::createOperand( eOperandType type, std::string const & value ) const
 {
     IOperand const * newOperand = nullptr;
+    try {
+        verifyTypesGiven(type, value);
+    }
+    catch(AbstractVM::Exception & e){
+        throw e;
+        return nullptr;
+    }
     auto it = operandByType.find(type);
     if (it != operandByType.end()) {
         auto ctor = it->second;

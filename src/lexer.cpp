@@ -2,7 +2,12 @@
 #include "abstractvm.hpp"
 #include <iostream>
 #include <boost/algorithm/string.hpp>
+#include <exception>
 
+// static void checkIfProperType(eOperandType givenType, std::string value)
+// {
+    
+// }
 Lexer::Lexer()
 {
     _getCmdToken = {
@@ -47,11 +52,9 @@ Token Lexer::createToken(std::string str)
 
 Token Lexer::_fillToken(std::vector<std::string> cmdAndValue)
 {
-    // std::cout << "in fillToken " << std::endl;
     Token token;
     if(!cmdAndValue.empty()) {
         std::string cmdStr = cmdAndValue[0];
-        // std::cout << "cmd : " << cmdStr << std::endl;
         auto cmdIt = _getCmdToken.find(cmdStr);
         if( cmdIt != _getCmdToken.end()){
             token.cmd = cmdIt->second;
@@ -59,12 +62,17 @@ Token Lexer::_fillToken(std::vector<std::string> cmdAndValue)
                && (token.cmd == Token::CMD::PUSH
                    || token.cmd == Token::CMD::ASSERT)) {
                 std::string valueStr = cmdAndValue[1];
-                // std::cout << "value : " << valueStr << std::endl;
                 std::string valueType = _getValueType(valueStr);
-                std::string value = _getValue(valueStr);
-                auto typeIt = _getOperandType.find(valueType);
-                if( typeIt != _getOperandType.end()){
-                    token.valueOperand = _factory.createOperand(typeIt->second, value);
+                try {
+                    std::string value = _getValue(valueStr);
+                    auto typeIt = _getOperandType.find(valueType);
+                    if( typeIt != _getOperandType.end()){
+                        token.valueOperand = _factory.createOperand(typeIt->second, value);
+                    }
+                }
+                catch(AbstractVM::Exception & e){
+                    std::cout << "Error :" << e.what() << std::endl;
+                    token.cmd = Token::CMD::EXIT;
                 }
             }
         }
@@ -79,7 +87,6 @@ std::string Lexer::_getValueType(std::string string)
     if(lengthValue != std::string::npos) {
         valueType = string.substr(0, lengthValue);
     }
-    // std::cout << "getValueType : " << valueType << std::endl;
     return valueType;
 }
 
@@ -87,11 +94,15 @@ std::string Lexer::_getValue(std::string string)
 {
     std::string value;
     size_t begin = string.find('(') + 1; // +1 to get rid of '('
-    size_t end = string.find(')'); 
+    size_t end = string.size() - 1;
     if(begin != std::string::npos
        && end != std::string::npos) {
         value = string.substr(begin, end - begin);
     }
-    // std::cout << "getValue: " << value<< std::endl;
+    bool has_only_digits = (value.find_first_not_of( "0123456789." ) == std::string::npos);
+    if(has_only_digits == false) {
+        std::cout << "Invalid value : \"" << value << "\"" << std::endl;
+        throw AbstractVM::Exception("Invalid value");
+    }
     return value;
 }

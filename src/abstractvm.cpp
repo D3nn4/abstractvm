@@ -11,7 +11,6 @@ void AbstractVM::run(std::string fileName)
     _readOnFile = true;
     while (std::getline(infile, line)) {
         std::istringstream iss(line);
-        // std::cout << line << std::endl;
         _manageEntry(line);
         line.clear();
     }

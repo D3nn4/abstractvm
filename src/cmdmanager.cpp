@@ -41,8 +41,7 @@ void CmdManager::cmd(std::vector<IOperand const *> & stack, Token token)
     }
     catch(AbstractVM::Exception & e)
     {
-        // std::cout << "error : " << e.what() << std::endl;
-        throw AbstractVM::Exception("Wrong value");
+        throw e;
     }
 }
 
@@ -50,9 +49,6 @@ void CmdManager::push   (std::vector<IOperand const *> & stack, Token token)
 {
     if(token.valueOperand != nullptr) {
         stack.push_back(token.valueOperand);
-    }
-    else {
-        throw AbstractVM::Exception("Wrong value");
     }
 }
 void CmdManager::pop    (std::vector<IOperand const *> & stack, Token )
@@ -80,7 +76,7 @@ void CmdManager::assert (std::vector<IOperand const *> & stack, Token token)
         }
     }
     else {
-        throw AbstractVM::Exception("No value to assert");
+        throw AbstractVM::Exception("No value on stack");
     }
 }
 void CmdManager::add    (std::vector<IOperand const *> & stack, Token )
@@ -167,7 +163,7 @@ void CmdManager::mod    (std::vector<IOperand const *> & stack, Token )
         if (rhs->toString().compare("0") == 0) {
             throw AbstractVM::Exception("Can't divide by 0");
             return;
-        }
+        } 
         stack.pop_back();
         IOperand const * lhs = stack.back();
         stack.pop_back();
@@ -184,5 +180,14 @@ void CmdManager::mod    (std::vector<IOperand const *> & stack, Token )
 }
 void CmdManager::print  (std::vector<IOperand const *> & stack, Token )
 {
-    
+    IOperand const * toPrint = stack.back();
+    if(toPrint->getType() != eOperandType::INT8){
+        throw AbstractVM::Exception("Can't print anything other than an int8");
+        return;
+    }
+    int intergerToPrint = std::stoi(toPrint->toString());
+    if( '!' <= intergerToPrint && intergerToPrint <= '~' ){
+        char charToPrint = intergerToPrint;
+        std::cout << charToPrint << std::endl;
+    }
 }
