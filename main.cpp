@@ -10,7 +10,6 @@ int main(int argc, char ** argv)
     else {
         vm.run();
     }
-    std::cout << "The End.\n";
 
-return 0;
+    return 0;
 }

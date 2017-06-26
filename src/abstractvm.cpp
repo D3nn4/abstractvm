@@ -3,28 +3,58 @@
 #include <exception>
 #include <fstream>
 #include <sstream>
+#include <cstdbool>
 
 void AbstractVM::run(std::string fileName)
 {
     std::ifstream infile(fileName);
+    std::vector<std::string> entryList;
     std::string line;
     _readOnFile = true;
     while (std::getline(infile, line)) {
         std::istringstream iss(line);
-        _manageEntry(line);
+        entryList.push_back(line);
         line.clear();
+    }
+    bool run = true;
+    for(std::string cmd : entryList){
+        run = _manageEntry(cmd);
+        if(run == false){
+            break;
+        }
+    }
+    if(run != false
+       && entryList.back().compare("exit") != 0){
+        std::cout << "Error : no exit command" << std::endl;
     }
 }
 
 void AbstractVM::run()
 {
     _readOnFile = false;
+    std::vector<std::string> entryList;
     std::string entry;
     bool read = true;
     while(read) {
         std::getline(std::cin, entry);
-        read = _manageEntry(entry);
+        if(entry.compare(";;") == 0){
+            read = false;
+        }
+        else{
+            entryList.push_back(entry);
+        }
         entry.clear();
+    }
+    bool run = true;
+    for(std::string cmd : entryList){
+        run = _manageEntry(cmd);
+        if(run == false){
+            break;
+        }
+    }
+    if(run != false
+       && entryList.back().compare("exit") != 0){
+        std::cout << "Error : no exit command" << std::endl;
     }
 }
 
