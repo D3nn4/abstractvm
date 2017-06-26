@@ -13,7 +13,9 @@ void AbstractVM::run(std::string fileName)
     _readOnFile = true;
     while (std::getline(infile, line)) {
         std::istringstream iss(line);
-        entryList.push_back(line);
+        if(!line.empty()){
+            entryList.push_back(line);
+        }
         line.clear();
     }
     bool run = true;
@@ -40,8 +42,8 @@ void AbstractVM::run()
         if(entry.compare(";;") == 0){
             read = false;
         }
-        else{
-            entryList.push_back(entry);
+        else if(!entry.empty()){
+                entryList.push_back(entry);
         }
         entry.clear();
     }
