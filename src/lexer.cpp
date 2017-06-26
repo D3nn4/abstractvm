@@ -114,8 +114,15 @@ std::string Lexer::_getValue(std::string string)
        && end != std::string::npos) {
         value = string.substr(begin, end - begin);
     }
-    bool has_only_digits = (value.find_first_not_of( "0123456789." ) == std::string::npos);
-    if(has_only_digits == false) {
+    bool isAValidValue = false;
+    if(value[0] == '-'){
+        std::string number = value.substr(1);
+        isAValidValue = (number.find_first_not_of( "0123456789." ) == std::string::npos);
+    }
+    else{
+        isAValidValue = (value.find_first_not_of( "0123456789." ) == std::string::npos);
+    }
+    if(isAValidValue == false) {
         std::cout << "Invalid value : \"" << value << "\"" << std::endl;
         throw AbstractVM::Exception("Invalid value");
     }
