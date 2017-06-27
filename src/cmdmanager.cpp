@@ -35,14 +35,7 @@ void CmdManager::cmd(std::vector<IOperand const *> & stack, Token token)
     if(cmds.find(token.cmd) == cmds.end()) {
         throw AbstractVM::Exception("Unknown cmd");
     }
-    try
-    {
-        cmds[token.cmd](stack, token);
-    }
-    catch(AbstractVM::Exception & e)
-    {
-        throw e;
-    }
+    cmds[token.cmd](stack, token);
 }
 
 void CmdManager::push   (std::vector<IOperand const *> & stack, Token token)

@@ -9,26 +9,16 @@ void AbstractVM::run(std::string fileName)
 {
     std::ifstream infile(fileName);
     std::vector<std::string> entryList;
-    std::string line;
+    std::string entry;
     _readOnFile = true;
-    while (std::getline(infile, line)) {
-        std::istringstream iss(line);
-        if(!line.empty()){
-            entryList.push_back(line);
+    while (std::getline(infile, entry)) {
+        std::istringstream iss(entry);
+        if(!entry.empty()){
+            entryList.push_back(entry);
         }
-        line.clear();
+        entry.clear();
     }
-    bool run = true;
-    for(std::string cmd : entryList){
-        run = _manageEntry(cmd);
-        if(run == false){
-            break;
-        }
-    }
-    if(run != false
-       && entryList.back().compare("exit") != 0){
-        std::cout << "Error : no exit command" << std::endl;
-    }
+    _manageEntry(entryList);
 }
 
 void AbstractVM::run()
@@ -47,49 +37,37 @@ void AbstractVM::run()
         }
         entry.clear();
     }
-    bool run = true;
-    for(std::string cmd : entryList){
-        run = _manageEntry(cmd);
-        if(run == false){
-            break;
+    _manageEntry(entryList);
+}
+
+void AbstractVM::_manageEntry(std::vector<std::string> entryList)
+{
+    int line = 1;
+    if(!entryList.empty()){
+        try {
+            for(std::string cmd : entryList){
+                _applyCmd(cmd);
+                line++;
+            }
+            if(entryList.back().compare("exit") != 0){
+                throw AbstractVM::Exception("no exit command");
+            }
+        }
+        catch(AbstractVM::Exception & e) {
+            std::cout << "Line " << line << " : error : " << e.what() << std::endl;
         }
     }
-    if(run != false
-       && entryList.back().compare("exit") != 0){
-        std::cout << "Error : no exit command" << std::endl;
+    else {
+        std::cout << "Error : empty program" << std::endl;
     }
 }
 
-bool AbstractVM::_manageEntry(std::string entry)
+void AbstractVM::_applyCmd(std::string entry)
 {
     Token token;
-    try {
-        token = _lexer.createToken(entry);
+    token = _lexer.createToken(entry);
+    if(token.cmd != Token::CMD::EXIT
+       && token.cmd != Token::CMD::COM) {
+        _cmdManager.cmd(_stack, token);
     }
-    catch(Exception & e){
-        std::cout << "error : " << e.what() << std::endl;
-        return false;
-    }
-    if(token.cmd == Token::CMD::EXIT) {
-        return false;
-    }
-    return _applyCmd(token);
-}
-
-bool AbstractVM::_applyCmd(Token token)
-{
-    if(token.cmd != Token::CMD::EMPTY
-       || token.cmd != Token::CMD::EXIT) {
-        if(token.cmd != Token::CMD::COM) {
-            try {
-                _cmdManager.cmd(_stack, token);
-            }
-            catch (Exception & e) {
-                std::cout << "error : " << e.what() << std::endl;
-                return false;
-            }
-        }
-        return true;
-    }
-    return false;
 }

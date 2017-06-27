@@ -22,6 +22,71 @@ static void verifyTypesGiven(eOperandType type, std::string const & value)
        || (type >= eOperandType::FLOAT && !hasFloatingPoint)) {
         throw AbstractVM::Exception("Value not of the given type");
     }
+    if(type == eOperandType::INT8){
+        try {
+            std::stoi(value);
+        }
+        catch (std::exception & e){
+            if(value[0] == '-'){
+                throw AbstractVM::Exception("Underflow");
+            }
+            else{
+                throw AbstractVM::Exception("Overflow");
+            }
+        }
+    }
+    else if(type == eOperandType::INT16){
+        try {
+            std::stol(value);
+        }
+        catch (std::exception & e){
+            if(value[0] == '-'){
+                throw AbstractVM::Exception("Underflow");
+            }
+            else{
+                throw AbstractVM::Exception("Overflow");
+                    }
+        }
+    }
+    else if(type == eOperandType::INT32){
+        try {
+            std::stoll(value);
+        }
+        catch (std::exception & e){
+            if(value[0] == '-'){
+                throw AbstractVM::Exception("Underflow");
+            }
+            else{
+                throw AbstractVM::Exception("Overflow");
+                    }
+        }
+    }
+    else if(type == eOperandType::FLOAT){
+        try {
+            std::stof(value);
+        }
+        catch (std::exception & e){
+            if(value[0] == '-'){
+                throw AbstractVM::Exception("Underflow");
+            }
+            else{
+                throw AbstractVM::Exception("Overflow");
+                    }
+        }
+    }
+    else if(type == eOperandType::DOUBLE){
+        try {
+            std::stod(value);
+        }
+        catch (std::exception & e){
+            if(value[0] == '-'){
+                throw AbstractVM::Exception("Underflow");
+            }
+            else{
+                throw AbstractVM::Exception("Overflow");
+                    }
+        }
+    }
 }
 
 Factory::Factory()

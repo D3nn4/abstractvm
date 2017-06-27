@@ -4,10 +4,6 @@
 #include <boost/algorithm/string.hpp>
 #include <exception>
 
-// static void checkIfProperType(eOperandType givenType, std::string value)
-// {
-    
-// }
 Lexer::Lexer()
 {
     _getCmdToken = {
@@ -73,21 +69,19 @@ Token Lexer::_fillToken(std::vector<std::string> cmdAndValue)
         auto cmdIt = _getCmdToken.find(cmdStr);
         if( cmdIt != _getCmdToken.end()){
             token.cmd = cmdIt->second;
-            if(cmdAndValue.size() == 2
-               && (token.cmd == Token::CMD::PUSH
-                   || token.cmd == Token::CMD::ASSERT)) {
-                std::string valueStr = cmdAndValue[1];
-                std::string valueType = _getValueType(valueStr);
-                try {
+            if(token.cmd == Token::CMD::PUSH
+               || token.cmd == Token::CMD::ASSERT) {
+                if(cmdAndValue.size() == 2){
+                    std::string valueStr = cmdAndValue[1];
+                    std::string valueType = _getValueType(valueStr);
                     std::string value = _getValue(valueStr);
                     auto typeIt = _getOperandType.find(valueType);
                     if( typeIt != _getOperandType.end()){
                         token.valueOperand = _factory.createOperand(typeIt->second, value);
                     }
                 }
-                catch(AbstractVM::Exception & e){
-                    std::cout << "Error :" << e.what() << std::endl;
-                    token.cmd = Token::CMD::EXIT;
+                else {
+                    throw AbstractVM::Exception("Missing Value");
                 }
             }
         }
@@ -123,7 +117,6 @@ std::string Lexer::_getValue(std::string string)
         isAValidValue = (value.find_first_not_of( "0123456789." ) == std::string::npos);
     }
     if(isAValidValue == false) {
-        std::cout << "Invalid value : \"" << value << "\"" << std::endl;
         throw AbstractVM::Exception("Invalid value");
     }
     return value;

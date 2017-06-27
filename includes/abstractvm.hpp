@@ -35,8 +35,8 @@ public:
 
 private:
 
-    bool _manageEntry(std::string entry);
-    bool _applyCmd(Token token);
+    void _applyCmd(std::string entry);
+    void _manageEntry(std::vector<std::string> entryList);
 
     Factory _factory;
     Lexer _lexer;

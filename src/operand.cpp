@@ -30,9 +30,6 @@ static void setResPrecision(std::string & str, int precision)
         int endOfDouble = floatPoint + precision;
         str = str.substr(0, endOfDouble);
     }
-    else {
-        // TODO trow exception or error management
-    }
 }
 
 Operand::Operand(eOperandType type, std::string val)
@@ -67,30 +64,22 @@ IOperand const * Operand::operator+( IOperand const & rhs ) const
     Operand const * rhsOperand = nullptr;
     IOperand const * result = nullptr;
     std::string resultValue;
-    try {
-        rhsOperand = static_cast<Operand const *>(&rhs);
-
-        if(rhsOperand != nullptr){
-            if(resultType < eOperandType::FLOAT){
-                long long int numericalLhs = std::stoll(toString());
-                long long int numericalRhs = std::stoll(rhsOperand->toString());
-                long long int numericalTotal = numericalLhs + numericalRhs;
-                resultValue = std::to_string(numericalTotal);
-            }
-            else{
-                long double numericalLhs = std::stold(toString());
-                long double numericalRhs = std::stold(rhsOperand->toString());
-                long double numericalTotal = numericalLhs + numericalRhs;
-                resultValue = std::to_string(numericalTotal);
-            }
-            setResPrecision(resultValue, resultPrecision);
-            result = _factory.createOperand(resultType, resultValue);
-
+    rhsOperand = static_cast<Operand const *>(&rhs);
+    if(rhsOperand != nullptr){
+        if(resultType < eOperandType::FLOAT){
+            long long int numericalLhs = std::stoll(toString());
+            long long int numericalRhs = std::stoll(rhsOperand->toString());
+            long long int numericalTotal = numericalLhs + numericalRhs;
+            resultValue = std::to_string(numericalTotal);
         }
-
-    }
-    catch(const std::exception& e) {
-        std::cout << "Error cast " << e.what() << std::endl;
+        else{
+            long double numericalLhs = std::stold(toString());
+            long double numericalRhs = std::stold(rhsOperand->toString());
+            long double numericalTotal = numericalLhs + numericalRhs;
+            resultValue = std::to_string(numericalTotal);
+        }
+        setResPrecision(resultValue, resultPrecision);
+        result = _factory.createOperand(resultType, resultValue);
     }
     return result;
 }
@@ -102,30 +91,22 @@ IOperand const * Operand::operator-( IOperand const & rhs ) const
     Operand const * rhsOperand = nullptr;
     IOperand const * result = nullptr;
     std::string resultValue;
-    try {
-        rhsOperand = static_cast<Operand const *>(&rhs);
-
-        if(rhsOperand != nullptr){
-            if(resultType < eOperandType::FLOAT){
-                long long int numericalLhs = std::stoll(toString());
-                long long int numericalRhs = std::stoll(rhsOperand->toString());
-                long long int numericalTotal = numericalLhs - numericalRhs;
-                resultValue = std::to_string(numericalTotal);
-            }
-            else{
-                long double numericalLhs = std::stold(toString());
-                long double numericalRhs = std::stold(rhsOperand->toString());
-                long double numericalTotal = numericalLhs - numericalRhs;
-                resultValue = std::to_string(numericalTotal);
-            }
-            setResPrecision(resultValue, resultPrecision);
-            result = _factory.createOperand(resultType, resultValue);
-
+    rhsOperand = static_cast<Operand const *>(&rhs);
+    if(rhsOperand != nullptr){
+        if(resultType < eOperandType::FLOAT){
+            long long int numericalLhs = std::stoll(toString());
+            long long int numericalRhs = std::stoll(rhsOperand->toString());
+            long long int numericalTotal = numericalLhs - numericalRhs;
+            resultValue = std::to_string(numericalTotal);
         }
-
-    }
-    catch(const std::exception& e) {
-        std::cout << "Error cast " << e.what() << std::endl;
+        else{
+            long double numericalLhs = std::stold(toString());
+            long double numericalRhs = std::stold(rhsOperand->toString());
+            long double numericalTotal = numericalLhs - numericalRhs;
+            resultValue = std::to_string(numericalTotal);
+        }
+        setResPrecision(resultValue, resultPrecision);
+        result = _factory.createOperand(resultType, resultValue);
     }
     return result;
 }
@@ -137,30 +118,22 @@ IOperand const * Operand::operator*( IOperand const & rhs ) const
     Operand const * rhsOperand = nullptr;
     IOperand const * result = nullptr;
     std::string resultValue;
-    try {
-        rhsOperand = static_cast<Operand const *>(&rhs);
-
-        if(rhsOperand != nullptr){
-            if(resultType < eOperandType::FLOAT){
-                long long int numericalLhs = std::stoll(toString());
-                long long int numericalRhs = std::stoll(rhsOperand->toString());
-                long long int numericalTotal = numericalLhs * numericalRhs;
-                resultValue = std::to_string(numericalTotal);
-            }
-            else{
-                long double numericalLhs = std::stold(toString());
-                long double numericalRhs = std::stold(rhsOperand->toString());
-                long double numericalTotal = numericalLhs * numericalRhs;
-                resultValue = std::to_string(numericalTotal);
-            }
-            setResPrecision(resultValue, resultPrecision);
-            result = _factory.createOperand(resultType, resultValue);
-
+    rhsOperand = static_cast<Operand const *>(&rhs);
+    if(rhsOperand != nullptr){
+        if(resultType < eOperandType::FLOAT){
+            long long int numericalLhs = std::stoll(toString());
+            long long int numericalRhs = std::stoll(rhsOperand->toString());
+            long long int numericalTotal = numericalLhs * numericalRhs;
+            resultValue = std::to_string(numericalTotal);
         }
-
-    }
-    catch(const std::exception& e) {
-        std::cout << "Error cast " << e.what() << std::endl;
+        else{
+            long double numericalLhs = std::stold(toString());
+            long double numericalRhs = std::stold(rhsOperand->toString());
+            long double numericalTotal = numericalLhs * numericalRhs;
+            resultValue = std::to_string(numericalTotal);
+        }
+        setResPrecision(resultValue, resultPrecision);
+        result = _factory.createOperand(resultType, resultValue);
     }
     return result;
 }
@@ -172,30 +145,22 @@ IOperand const * Operand::operator/( IOperand const & rhs ) const
     Operand const * rhsOperand = nullptr;
     IOperand const * result = nullptr;
     std::string resultValue;
-    try {
-        rhsOperand = static_cast<Operand const *>(&rhs);
-
-        if(rhsOperand != nullptr){
-            if(resultType < eOperandType::FLOAT){
-                long long int numericalLhs = std::stoll(toString());
-                long long int numericalRhs = std::stoll(rhsOperand->toString());
-                long long int numericalTotal = numericalLhs / numericalRhs;
-                resultValue = std::to_string(numericalTotal);
-            }
-            else{
-                long double numericalLhs = std::stold(toString());
-                long double numericalRhs = std::stold(rhsOperand->toString());
-                long double numericalTotal = numericalLhs / numericalRhs;
-                resultValue = std::to_string(numericalTotal);
-            }
-            setResPrecision(resultValue, resultPrecision);
-            result = _factory.createOperand(resultType, resultValue);
-
+    rhsOperand = static_cast<Operand const *>(&rhs);
+    if(rhsOperand != nullptr){
+        if(resultType < eOperandType::FLOAT){
+            long long int numericalLhs = std::stoll(toString());
+            long long int numericalRhs = std::stoll(rhsOperand->toString());
+            long long int numericalTotal = numericalLhs / numericalRhs;
+            resultValue = std::to_string(numericalTotal);
         }
-
-    }
-    catch(const std::exception& e) {
-        std::cout << "Error cast " << e.what() << std::endl;
+        else{
+            long double numericalLhs = std::stold(toString());
+            long double numericalRhs = std::stold(rhsOperand->toString());
+            long double numericalTotal = numericalLhs / numericalRhs;
+            resultValue = std::to_string(numericalTotal);
+        }
+        setResPrecision(resultValue, resultPrecision);
+        result = _factory.createOperand(resultType, resultValue);
     }
     return result;
 }
@@ -207,31 +172,23 @@ IOperand const * Operand::operator%( IOperand const & rhs ) const
     Operand const * rhsOperand = nullptr;
     IOperand const * result = nullptr;
     std::string resultValue;
-    try {
-        rhsOperand = static_cast<Operand const *>(&rhs);
-
-        if(rhsOperand != nullptr){
-            if(resultType < eOperandType::FLOAT){
-                long long int numericalLhs = std::stoll(toString());
-                long long int numericalRhs = std::stoll(rhsOperand->toString());
-                long long int numericalTotal = numericalLhs % numericalRhs;
-                resultValue = std::to_string(numericalTotal);
-            }
-            else{
-                long double numericalLhs = std::stold(toString());
-                long double numericalRhs = std::stold(rhsOperand->toString());
-                long double numericalTotal = fmod(numericalLhs, numericalRhs);
-                resultValue = std::to_string(numericalTotal);
-            }
-            setResPrecision(resultValue, resultPrecision);
-            result = _factory.createOperand(resultType, resultValue);
-
+    rhsOperand = static_cast<Operand const *>(&rhs);
+    if(rhsOperand != nullptr){
+        if(resultType < eOperandType::FLOAT){
+            long long int numericalLhs = std::stoll(toString());
+            long long int numericalRhs = std::stoll(rhsOperand->toString());
+            long long int numericalTotal = numericalLhs % numericalRhs;
+            resultValue = std::to_string(numericalTotal);
         }
-
-    }
-    catch(const std::exception& e) {
-        std::cout << "Error cast " << e.what() << std::endl;
-    }
+        else{
+            long double numericalLhs = std::stold(toString());
+            long double numericalRhs = std::stold(rhsOperand->toString());
+            long double numericalTotal = fmod(numericalLhs, numericalRhs);
+            resultValue = std::to_string(numericalTotal);
+        }
+        setResPrecision(resultValue, resultPrecision);
+        result = _factory.createOperand(resultType, resultValue);
+        }
     return result;
 }
 
